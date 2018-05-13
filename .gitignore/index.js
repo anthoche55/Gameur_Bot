@@ -53,7 +53,7 @@ bot.on('message', message => {
     command = args.shift().toLowerCase();
 
     if (command === "kick") {
-        let modRole = message.guild.roles.find("name", "⛔👑Gérant du serveur 🌟 ⛔");
+        let modRole = message.guild.roles.find("name", "🔐 Equipe Staff");
         if(!message.member.roles.has(modRole.id)) {
             return message.reply("Tu n'as pas la permission de faire cette commande.").catch(console.error);
         }
@@ -75,7 +75,7 @@ bot.on('message', message => {
     }
 
     if (command === "ban") {
-        let modRole = message.guild.roles.find("name", "⛔👑Gérant du serveur 🌟 ⛔");
+        let modRole = message.guild.roles.find("name", "🔐 Equipe Staff");
         if(!message.member.roles.has(modRole.id)) {
             return message.reply("Tu n'as pas la permission de faire cette commande.").catch(console.error);
         }
@@ -209,7 +209,7 @@ bot.on("message", function(message) {
         if (message.member.hasPermission("MANAGE_MESSAGES")){
             message.channel.fetchMessages()
                 .then(function(list){
-                    message.channel.bulkDelete(list);
+                    message.channel.bulkDelete(list).catch(console.log("message du serveur effacée"));
                 }, function(err){message.channel.send("Erreur")})}
         }});
 
@@ -226,7 +226,7 @@ bot.on('message', message => {
                 .addField("-@clear", "pour supprimé les message")
                 .addField("-@création", "voir la date de création du bot")
                 .addField("-@créateur", "pour voir qui a créée ce bot")
-                .setColor("#01E2C4")
+                .setColor("#00EFEF")
                 .setFooter("Ceci sont les commande du bot ! ")
             message.channel.sendEmbed(help_embed)
         }})
