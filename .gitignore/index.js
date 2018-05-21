@@ -2,9 +2,21 @@ const Discord = require('discord.js');
 const bot = new Discord.Client();
 const low = require('lowdb');
 const FileSync = require('lowdb/adapters/FileSync');
+const playlist = require('discord.js-music');
+const YoutubeDL = require('youtube-dl');
+const ytdl = require('ytdl-core');
+const music = require('discord.js-music-v11')
 
 const adapter = new FileSync('database.json');
 const db = low(adapter);
+
+music(bot, {
+	prefix: '@',       
+	global: false,     
+	maxQueueSize: 10,  
+	clearInvoker: true, 
+    channel: 'music'  
+});
 
 db.defaults({ histoires: [], xp: []}).write()
 
@@ -26,11 +38,11 @@ function sendError(message, description) {
 
 bot.on('message',message => {
     if (message.content === prefix + "création") {
-        message.reply("Création du bot le __11/05/2018__");   
+        message.channel.send("Création du bot le __11/05/2018__");   
        console.log("yes");
     }
     if (message.content === prefix + "créateur") {
-        message.reply("__**Ce bot a été créer par Anthoche55**__");   
+        message.channel.send("__**Ce bot a été créer par Tamaki Yagami#6540**__");   
        console.log("yes");
     }
     if (message.content ===  "ping") {
@@ -53,7 +65,7 @@ bot.on('message', message => {
     command = args.shift().toLowerCase();
 
     if (command === "kick") {
-        let modRole = message.guild.roles.find("name", "🔐 Equipe Staff");
+        let modRole = message.guild.roles.find("name", "🔐 『Équipe Staff』");
         if(!message.member.roles.has(modRole.id)) {
             return message.reply("Tu n'as pas la permission de faire cette commande.").catch(console.error);
         }
@@ -75,7 +87,7 @@ bot.on('message', message => {
     }
 
     if (command === "ban") {
-        let modRole = message.guild.roles.find("name", "🔐 Equipe Staff");
+        let modRole = message.guild.roles.find("name", "🔐 『Équipe Staff』");
         if(!message.member.roles.has(modRole.id)) {
             return message.reply("Tu n'as pas la permission de faire cette commande.").catch(console.error);
         }
@@ -118,7 +130,7 @@ bot.on('message', message => {
             var xpfinal = Object.values(xp);
             var xp_embed = new Discord.RichEmbed()
                 .setTitle(`Stat des xp de ${message.author.username}`)
-                .setColor('#F4D03F')
+                .setColor('#0AF340')
                 .setDescription("Affichage des XP")
                 .addField("XP:", `${xpfinal[1]} xp `)
                 .setFooter("Si tu veux plus d'xp sois plus actifs 😉")
@@ -126,67 +138,6 @@ bot.on('message', message => {
             
         }}})
 
-bot.on('message', message => {
-           
-    if (message.content === "comment tu vas ?"){
-        random();
-            
-        if (random == 1){
-            message.reply("Oui sa va")
-            console.log(random);
-        }
-            
-        if (random == 2){
-            message.reply("Non mais sa va allez :cry:")
-            console.log(random);
-        }
-    }
-    
-function random (min, max){
-    min = Math.ceil(0);
-    max = Math.floor(5);
-    random = Math.floor(Math.random() * (max - min +1) + min);
-    }
-});
-
-
-bot.on(`message`, message => {
-    if(message.content[0] === prefix) {
-        let splitMessage = message.content.split(" ");
-        if(splitMessage[0] === `@play`) {
-            if(splitMessage.length === 2)
-            {
-                if(message.member.voiceChannel)
-                {
-                    message.member.voiceChannel.join().then(connection => {
-                        dispatcher = connection.playArbitraryInput(splitMessage[1]);
-
-                        dispatcher.on('error', e => {
-                            console.log(e);
-                        });
-
-                        dispatcher.on('end', e => {
-                            dispatcher = undefined;
-                            console.log('Fin du son');
-                        });
-                    }).catch(console.log);
-                }
-                else
-                    sendError(message, "Erreur, Vous devez d'abord rejoindre un canal vocal");
-            }
-            else
-                sendError(message, 'Erreur, problème dans les paramètres');
-        }
-        else if(splitMessage[0] === `@pause`) {
-            if(dispatcher !== undefined)
-                dispatcher.pause()
-        }
-        else if(splitMessage[0] === `@resume`) 
-            if(dispatcher !== undefined)
-                dispatcher.resume();
-        }
-    }
-);
 
 bot.on('guildMemberAdd' , member => {
     member.createDM().then(channel => {
@@ -202,10 +153,11 @@ bot.on("message", function(message) {
     var args = message.content.substring(prefix.length).split(" ");
 
     switch (args[0].toLowerCase()) {
-        case "ping":
+		case "ping":
+		message.delete()
         message.channel.sendMessage('temp de latence avec le serveur:  `' + `${message.createdTimestamp - Date.now()}` + 'ms`').catch(console.log("ping du serveur demander !"));
         break;
-        case "clear":
+		case "clear":
         if (message.member.hasPermission("MANAGE_MESSAGES")){
             message.channel.fetchMessages()
                 .then(function(list){
@@ -215,6 +167,7 @@ bot.on("message", function(message) {
 
 bot.on('message', message => {
         if (message.content === prefix + "help") {
+			message.delete()
             var help_embed = new Discord.RichEmbed()
                 .setTitle("__**Commande du bot**__")
                 .setDescription(" __voici les commandes du bot :__")
@@ -224,11 +177,129 @@ bot.on('message', message => {
                 .addField("-@xp", "pour voir l xp gagné")
                 .addField("-@ping", "pour voir les ping du serveur")
                 .addField("-@clear", "pour supprimé les message")
-                .addField("-@création", "voir la date de création du bot")
-                .addField("-@créateur", "pour voir qui a créée ce bot")
+				.addField("-@création", "voir la date de création du bot")
+				.addField("-@créateur", "pour voir qui a créée ce bot")
+				.addField("-@avatar", "pour voir votre photo de profile")
+                .addField("-@Salut", "pour que le bot vous parle")
+                .addField("-@comment vas-tu ?", "pour que le bot vous parle")
                 .setColor("#00EFEF")
                 .setFooter("Ceci sont les commande du bot ! ")
             message.channel.sendEmbed(help_embed)
-        }})
+        }});
+
+bot.on('message', message => {
+    if (message.content === prefix + "comment vas-tu ?"){
+        random();
+        if (randnum == 1){
+            message.channel.send("Merci je vais très bein !");
+            console.log(randnum);
+        }
+        if (randnum == 2){
+            message.channel.send("ça va pas mais ça va aller merci de te sousier de moi !");
+            console.log(randnum)
+        }
+    }
+})
+bot.on('message', message => {
+    if (message.content === prefix + "Salut"){
+        randim();
+        if (randnum == 1){
+            message.channel.send("salut");
+            console.log(randnum);
+        }
+        if (randnum == 2){
+            message.channel.send("yo");
+            console.log(randnum)
+        }
+        if (randnum == 3){
+            message.channel.send("slt");
+            console.log(randnum)
+        }
+        if (randnum == 4){
+            message.channel.send("yo 😋");
+            console.log(randnum)
+        }
+        if (randnum == 5){
+            message.channel.send("salut🤨");
+            console.log(randnum)
+        }
     
+    }
+})
+function random (min, max){
+    min = Math.ceil(0);
+    max = Math.floor(2);
+    randnum = Math.floor(Math.random() * (max - min +1) + min);
+    }   
+
+function randim (min, max){
+    min = Math.ceil(0);
+    max = Math.floor(5);
+    randnum = Math.floor(Math.random() * (max - min +1) + min);
+    } 
+    
+    
+bot.on('message', message => {
+	if (message.content === prefix + 'avatar') {
+	  message.reply(message.author.avatarURL);
+	}
+  });
+
+  bot.on('message', message => {
+	
+	if (!message.guild) return;
+  
+	if (message.content === prefix + 'join') {
+	  // Only try to join the sender's voice channel if they are in one themselves
+	  if (message.member.voiceChannel) {
+		message.member.voiceChannel.join()
+		  .then(connection => { // Connection is an instance of VoiceConnection
+			message.reply('j\'ai réussi a ma connecter au channel audio !');
+		  })
+		  .catch(console.log);
+	  } else {
+		message.reply('Vous devez d\'abord rejoindre une chaîne vocale!');
+	  }
+	}
+  })
+
+
+  bot.on(`message`, message => {
+    if(message.content[0] === prefix) {
+        let splitMessage = message.content.split(" ");
+        if(splitMessage[0] === prefix + `play`) {
+            if(splitMessage.length === 2)
+            {
+                if(message.member.voiceChannel)
+                {
+                    message.member.voiceChannel.join().then(connection => {
+                        dispatcher = connection.playArbitraryInput('https://www.youtube.com/watch?v=ZMwbswoUdP8');
+
+                        dispatcher.on('error', e => {
+                            console.log(e);
+                        });
+
+                        dispatcher.on('end' , e => {
+                            dispatcher = undefined;
+                            console.log('Fin du son');
+                        });
+                    }).catch(console.log);
+                }
+                else
+                    sendError(message, "Erreur, Vous devez d'abord rejoindre un canal vocal");
+            }
+            else
+                sendError(message, 'Erreur, problème dans les paramètres');
+        }
+        else if(splitMessage[0] === prefix + `pause`) {
+            if(dispatcher !== undefined)
+                dispatcher.pause()
+        }
+        else if(splitMessage[0] === prefix + `resume`) 
+            if(dispatcher !== undefined)
+                dispatcher.resume();
+        }
+    }
+  );
+
 bot.login("NDQwNjIxNDM3MjM0MDUzMTIw.DcyC_w.JIor2AV27wRC4ojbf3ee3hLLhFU")
