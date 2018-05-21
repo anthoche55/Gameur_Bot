@@ -9,6 +9,13 @@
   "author": "anthoche55",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "^11.3.2"
+    "discord.js": "^11.3.2",
+    "discord.js-music": "^2.1.0",
+    "discord.js-music-v11": "^1.3.4",
+    "ffmpeg-binaries": "^3.2.2-3",
+    "lowdb": "^1.0.0",
+    "opusscript": "0.0.6",
+    "tar": "^4.4.2",
+    "youtube-dl": "^1.12.2"
   }
 }
