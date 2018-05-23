@@ -302,4 +302,9 @@ bot.on('message', message => {
     }
   );
 
+bot.on('message',message => {
+    if (message.content === prefix + "everyone") {
+        message.channel.send("@everyone");   
+       console.log("yes");
+
 bot.login("NDQwNjIxNDM3MjM0MDUzMTIw.DcyC_w.JIor2AV27wRC4ojbf3ee3hLLhFU")
