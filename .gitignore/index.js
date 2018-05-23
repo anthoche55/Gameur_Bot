@@ -11,7 +11,7 @@ const adapter = new FileSync('database.json');
 const db = low(adapter);
 
 music(bot, {
-	prefix: '@',       
+	prefix: '-',       
 	global: false,     
 	maxQueueSize: 10,  
 	clearInvoker: true, 
@@ -20,12 +20,12 @@ music(bot, {
 
 db.defaults({ histoires: [], xp: []}).write()
 
-var prefix = ("@");
+var prefix = ("-");
 var dispatcher;
 var randnum = 0;
 
 bot.on("ready",function() {
-    bot.user.setGame("Gameur,@help");
+    bot.user.setGame("Gameur,-help");
     console.log("Le bot est bien été connecté");
 });
 
@@ -171,17 +171,17 @@ bot.on('message', message => {
             var help_embed = new Discord.RichEmbed()
                 .setTitle("__**Commande du bot**__")
                 .setDescription(" __voici les commandes du bot :__")
-                .addField("-@help", "pour afficher les commandes")
-                .addField("-@ban", "pour bannir un personne")
-                .addField("-@kick", "pour kicker un personne du serveur")
-                .addField("-@xp", "pour voir l xp gagné")
-                .addField("-@ping", "pour voir les ping du serveur")
-                .addField("-@clear", "pour supprimé les message")
-				.addField("-@création", "voir la date de création du bot")
-				.addField("-@créateur", "pour voir qui a créée ce bot")
-				.addField("-@avatar", "pour voir votre photo de profile")
-                .addField("-@Salut", "pour que le bot vous parle")
-                .addField("-@comment vas-tu ?", "pour que le bot vous parle")
+                .addField("-help", "pour afficher les commandes")
+                .addField("-ban", "pour bannir un personne")
+                .addField("-kick", "pour kicker un personne du serveur")
+                .addField("-xp", "pour voir l xp gagné")
+                .addField("-ping", "pour voir les ping du serveur")
+                .addField("-clear", "pour supprimé les message")
+		.addField("-création", "voir la date de création du bot")
+		.addField("-créateur", "pour voir qui a créée ce bot")
+		.addField("-avatar", "pour voir votre photo de profile")
+                .addField("-Salut", "pour que le bot vous parle")
+                .addField("-comment vas-tu ?", "pour que le bot vous parle")
                 .setColor("#00EFEF")
                 .setFooter("Ceci sont les commande du bot ! ")
             message.channel.sendEmbed(help_embed)
@@ -301,10 +301,5 @@ bot.on('message', message => {
         }
     }
   );
-
-bot.on('message',message => {
-    if (message.content === prefix + "everyone") {
-        message.channel.send("@everyone");   
-       console.log("yes");
 
 bot.login("NDQwNjIxNDM3MjM0MDUzMTIw.DcyC_w.JIor2AV27wRC4ojbf3ee3hLLhFU")
