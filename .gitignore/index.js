@@ -302,4 +302,4 @@ bot.on('message', message => {
     }
   );
 
-bot.login("NDQwNjIxNDM3MjM0MDUzMTIw.DcyC_w.JIor2AV27wRC4ojbf3ee3hLLhFU")
+bot.login(config.token)
